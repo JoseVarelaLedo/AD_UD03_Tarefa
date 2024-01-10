@@ -12,9 +12,12 @@ import java.util.logging.Logger;
 public class App {
 
     final static Scanner in = new Scanner(System.in);
+    static Connection conexion;
+    static Statement sentencia;
+    static ResultSet resultado;
 
     public static void main(String[] args) {
-        Connection conexion = creaConexion();
+        conexion = creaConexion();
         if (conexion != null) {
             int opcion = menu();
             while (opcion != 0) {
@@ -43,11 +46,13 @@ public class App {
                 opcion = menu();
             }
         }
+        pecharFluxos();
     }
 
     static Connection creaConexion() {
-        final String conector = "jdbc:oracle:thin:@localhost:1539:XE";
-        Connection conexion = null;
+        System.out.println("Introduce porto no que está a Base de Datos á escoita. Por defecto é 1521, se non o cambiaches introduce ese.");
+        int porto = in.nextInt();
+        final String conector = "jdbc:oracle:thin:@localhost:"+porto+":XE";        
 
         try {
             System.out.println("Introduza nome de usuario para conectar coa base de datos");
@@ -103,8 +108,8 @@ public class App {
         }
 
         try {
-            Statement sentencia = conexion.createStatement();
-            ResultSet resultado = sentencia.executeQuery(consulta);
+            sentencia = conexion.createStatement();
+            resultado = sentencia.executeQuery(consulta);
             while (resultado.next()) {
                 String codigoVoo = opcion ? "\tCódigo voo: " + resultado.getString(2) : "";
                 System.out.println("Número pasaxeiro: " + resultado.getString(1)
@@ -121,7 +126,7 @@ public class App {
         System.out.println("Introduce datos do voo:");
         System.out.println("Código voo");
         String codVoo = in.next();
-        System.out.println("Día eHora de saída");
+        System.out.println("Día e Hora de saída");
         String horaSaida = in.next();
         System.out.println("Destino");
         String destino = in.next().toUpperCase();
@@ -148,7 +153,7 @@ public class App {
                 +"\'"+pPrimeira+"\'"
                 +")";
         try{
-            Statement sentencia = conexion.createStatement();
+            sentencia = conexion.createStatement();
             sentencia.execute (inserta);
         }catch(SQLException ex){
             ex.printStackTrace();
@@ -160,7 +165,7 @@ public class App {
          String voo = in.next();
          String borra = "DELETE FROM vuelos WHERE cod_vuelo=" + "\'" + voo + "\'";
           try{
-            Statement sentencia = conexion.createStatement();
+            sentencia = conexion.createStatement();
             sentencia.execute (borra);
         }catch(SQLException ex){
             ex.printStackTrace();
@@ -168,6 +173,16 @@ public class App {
     }
     
     static void modificaFumador(Connection con){
-        
+        //
+    }
+    static void pecharFluxos(){
+        try {
+            conexion.close();
+            sentencia.close();
+            resultado.close();
+            in.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
+        }        
     }
 }
