@@ -106,7 +106,7 @@ public class App {
                     String esquema = resultado.getString(2);
                     String tabla = resultado.getString(3);
                     String tipo = resultado.getString(4);                   
-                    System.out.printf("%s - Catalogo: %s, Esquema: %s, Nombre: %s %n", tipo, catalogo, esquema, tabla);
+                    System.out.printf("%s - Catálogo: %s, Esquema: %s, Nome: %s %n", tipo, catalogo, esquema, tabla);
                 }  while (resultado.next());
             }
         } catch (SQLException ex) {
