@@ -17,6 +17,7 @@ public class App {
     static Connection conexion;
     static Statement sentencia;
     static ResultSet resultado;
+    static String usuario;
 
     public static void main(String[] args) {
         conexion = creaConexion();
@@ -58,11 +59,11 @@ public class App {
 
         try {
             System.out.println("Introduza nome de usuario para conectar coa base de datos");
-            //String usuario = in.next();
-            String usuario = "c##jose";
+            usuario = in.next();
+            //usuario = "c##jose";
             System.out.println("Introduza contrasinal de usuario para conectar coa base de datos");
-            //String password = in.next();
-            String password = "chancludo";
+            String password = in.next();
+            //String password = "";
             conexion = DriverManager.getConnection(conector, usuario, password);
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -79,7 +80,7 @@ public class App {
                 + "\nConsultar datos pasaxeiro de voo\t\t Preme 3"
                 + "\nInsertar datos dun novo voo\t\t\t Preme 4"
                 + "\nBorrar o voo que se introduciu anteriormente\t Preme 5"
-                + "\nModificar condición de fumadores en voo\t\t Preme 6"
+                + "\nModificar condición de fumadores en voo\t Preme 6"
                 + "\n\nSaír, preme 0"
         );
         opción = in.nextInt();
@@ -94,6 +95,20 @@ public class App {
             System.out.println("Controlador: " + datos.getDriverName() + ", versión: " + datos.getDriverVersion());
             System.out.println("Nome do usuario: " + datos.getUserName());
             System.out.println("Dirección: " + datos.getURL());
+            resultado = datos.getTables(null, usuario.toUpperCase(), null, new String[] {"TABLE"});
+
+            if (!resultado.next()) {
+            System.out.println("No se encontraron tablas en el esquema " + usuario +".");
+            } else {
+                System.out.println ("\nTáboas da base de datos:");
+                do {
+                    String catalogo = resultado.getString(1);
+                    String esquema = resultado.getString(2);
+                    String tabla = resultado.getString(3);
+                    String tipo = resultado.getString(4);                   
+                    System.out.printf("%s - Catalogo: %s, Esquema: %s, Nombre: %s %n", tipo, catalogo, esquema, tabla);
+                }  while (resultado.next());
+            }
         } catch (SQLException ex) {
             Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
         }
