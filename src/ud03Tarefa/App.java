@@ -254,11 +254,11 @@ public class App {
     
     static void actualizaFumadorTodos(Connection conexion, boolean modo){
         String consulta = "SELECT COD_VUELO, PLAZAS_FUMADOR, PLAZAS_NO_FUMADOR FROM VUELOS";        
-        sentencia = conexion.createStatement();
         List <String> listaVuelos = new ArrayList<>();
         List <Integer>listaFumadores = new ArrayList<>();
         List <Integer> listaNoFumadores = new ArrayList<>();
         try {
+            sentencia = conexion.createStatement();
             resultado = sentencia.executeQuery(consulta);
             while (resultado.next()){
                 listaVuelos.add(resultado.getString(1));
