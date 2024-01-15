@@ -80,7 +80,7 @@ public class App {
                 + "\nConsultar datos pasaxeiro de voo\t\t Preme 3"
                 + "\nInsertar datos dun novo voo\t\t\t Preme 4"
                 + "\nBorrar o voo que se introduciu anteriormente\t Preme 5"
-                + "\nModificar condición de fumadores en voo\t Preme 6"
+                + "\nModificar condición de fumadores en voo\t\t Preme 6"
                 + "\n\nSaír, preme 0"
         );
         opción = in.nextInt();
@@ -250,15 +250,15 @@ public class App {
         int plazasNoFumador = modo?plazasTotales:plazasMetade;
         String actualizaFumador;
         String actualizaNoFumador;
-        final String UPDATE = "UPDATE vuelos SET PLAZAS_FUMADOR = ";
+        final String UPDATE = "UPDATE vuelos SET ";
         final String WHERE = "WHERE COD_VUELO = ";
         try {                   
-            actualizaFumador = UPDATE+"'"+plazasFumador +"'"+ WHERE +"'"+voo+"'";            
+            actualizaFumador = UPDATE + "PLAZAS_FUMADOR = " + "'"+plazasFumador +"'"+ WHERE +"'"+voo+"'";            
             
             sentencia = conexion.createStatement();
             sentencia.execute(actualizaFumador);
             
-            actualizaNoFumador = UPDATE + "'" + plazasNoFumador + "'" + WHERE +"'"+voo+"'";                
+            actualizaNoFumador = UPDATE + "PLAZAS_NO_FUMADOR = " +"'" + plazasNoFumador + "'" + WHERE +"'"+voo+"'";                
                              
             sentencia = conexion.createStatement();
             sentencia.execute(actualizaNoFumador);                    
